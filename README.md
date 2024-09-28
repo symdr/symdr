@@ -8,12 +8,38 @@ Features
 ===========
 Finding dispersion relation in:
 - Equations
-$u_t + u u_x = A^2 u_xx$
+  ```math
+  u_t + u u_x = A^2 u_xx
+  ```
 - System of equations
+```math
+\begin{equation*}
+\left\{
+ \begin{array}{lcl}
+%\begin{array}{l}
+\displaystyle v_t+vv_x+ \frac{v-u}{\tau} = 0,\\
+\displaystyle u_t + uu_x -\nu u_{xx} + \frac{\varepsilon(u-v)}{\tau} = 0.
+\end{array}
+\right.
+\end{equation*}
+```
 
 - Discrete equation
-$[u_t+u]_a+ \frac{u_{a+1}-u_{a-1}}{2h}=0$
+  ```math
+  [u_t+u]_a+\frac{u_{a+1}-u_{a-1}}{2h}=0
+  ```
 - Systems of discrete equations
+
+```math
+\begin{equation*}
+\left\{
+ \begin{array}{lcl}
+\displaystyle v_t+v \dfrac{v(x+h)-v(x-h)}{2h} + \frac{v-u}{\tau} = 0,\\
+\displaystyle u_t + u \dfrac{u(x+h)-u(x-h)}{2h} -\nu u_{xx} + \frac{\varepsilon(u-v)}{\tau} = 0.
+\end{array}
+\right.
+\end{equation*}
+```
 
 
 Quickstart
@@ -47,11 +73,14 @@ u = DiscreteGrid('u')
 ```
 
 Let see discrete analog of Korteweg–De Vries equation:
-$$ u_{t}=6uu_{x}-u_{xxx} $$
+```math
+u_{t}=6uu_{x}-u_{xxx}
+```
 
 For the third order derivative we going to use next scheme:
-$$ f^{(3)}(x)=\frac{f(x+2h)-2f(x+h)+2f(x-h)-f(x-2h)}{2h^3}$$
-
+```math
+f^{(3)}(x)=\frac{f(x+2h)-2f(x+h)+2f(x-h)-f(x-2h)}{2h^3} 
+```
 And we can write our equation
 ```
 equation = u.diff(t) + (u.at_x(a+2) - 2 * u.at_x(a+1) + 2 * u.at_x(a-1) - u.at_x(a-2)) / (2 * h ** 3)

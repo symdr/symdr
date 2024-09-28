@@ -12,7 +12,7 @@ $u_t + u u_x = A^2 u_xx$
 - System of equations
 
 - Discrete equation
-$ [u_t+u]_a+\frac{u_{a+1}-u_{a-1}}{2h}=0 $
+$[u_t+u]_a+\frac{u_{a+1}-u_{a-1}}{2h}=0$
 - Systems of discrete equations
 
 
@@ -29,7 +29,7 @@ pip install symdr
 Example
 ==========
 - If you are new in symbolic mathematics in python read SymPy [introduction](https://docs.sympy.org/latest/tutorials/intro-tutorial/index.html) first.
-- For the end to end example of equation analysis see [notebook]()
+- For the end to end example of equation analysis see [notebook](https://github.com/symdr/symdr/blob/master/example.ipynb)
 
 >!!!!!!! IMPORTANT !!!!!!!!
 >Variables `x`, `t`, `w`, `k` cannot be redefined. They are used for the algorithm. When working with discrete cases, the variables `h`, `tau`, `a` and `n` are also added to this list

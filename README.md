@@ -12,7 +12,7 @@ $u_t + u u_x = A^2 u_xx$
 - System of equations
 
 - Discrete equation
-$[u_t+u]_a+\frac{u_{a+1}-u_{a-1}}{2h}=0$
+$[u_t+u]_a+ \frac{u_{a+1}-u_{a-1}}{2h}=0$
 - Systems of discrete equations
 
 

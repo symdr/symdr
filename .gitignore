@@ -1,0 +1,7 @@
+
+*.egg
+*.egg-info
+dist
+build
+_build
+.installed.cfg

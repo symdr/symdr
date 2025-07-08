@@ -14,45 +14,6 @@ from .discrete_funcs import *
 def equation_dr(expr):
     return system_dr([expr])[2]
 
-"""
-def system_dr(equations):
-    fns = _get_function_list(equations)
-    const = symbols(f"c0:{len(fns)}")
-    amplitude = symbols(f"d0:{len(fns)}")
-    prs   = list(zip(fns, const))
-
-    def linearize(terms):
-        expr_ln = len(terms)
-        linerized_terms = []
-        amplss = list(zip(fns, amplitude))
-        prs   = list(zip(fns, const))
-
-        ampls = {i[0]: i[1] for i in amplss}
-
-        for term in range(expr_ln):
-          d = list(terms[term].atoms(D))
-          if (len(d) != 0):
-            f = LC(poly(terms[term], d[0]))
-
-
-            linerized_terms.append(
-            ((I*k)**(d[0].variables.count(x)))*((-I*w)**d[0].variables.count(t)) \
-            * f.subs(prs)* ampls[d[0].expr])
-
-          else:
-
-            linerized_terms.append(sum([ampls[fns[i]]*D(terms[term], fns[i]).subs(prs).doit() for i in range(len(fns))]))
-
-        return sum(linerized_terms)
-    lin_sys = []
-    for equation in equations:
-        terms = (equation.expand()).as_ordered_terms()
-        lin_sys.append(linearize(terms))
-
-    DR = linear_eq_to_matrix(lin_sys, amplitude)[0].det(method="lu")
-    return (prs, linear_eq_to_matrix(lin_sys, amplitude)[0], DR)
-"""
-
 def system_dr(equations):
     func_list = _get_function_list(equations)
     const_list = symbols(f"c0:{len(func_list)}")
@@ -72,13 +33,13 @@ def system_dr(equations):
                 derivative = derivatives[0]
                 factor = LC(poly(addend, derivative))
                 x_order, t_order = derivative.variables.count(x), derivative.variables.count(t)
-                factor_at_sol = factor.subs(func_values)
+                factor_at_sol = factor.subs(func_values).doit()
                 func = derivative.expr
-                addend = (I * k) ** x_order * (-I * w) ** t_order * factor_at_sol * func_amps[func]
+                lin_addend = (I * k) ** x_order * (-I * w) ** t_order * factor_at_sol * func_amps[func]
             else:
-                addend = sum(func_amps[func] * D(addend, func).subs(func_values).doit() for func in func_list)
+                lin_addend = sum(func_amps[func] * D(addend, func).subs(func_values).doit() for func in func_list)
 
-            linearised_addends.append(addend)
+            linearised_addends.append(lin_addend)
 
         return sum(linearised_addends)
 
@@ -90,6 +51,7 @@ def system_dr(equations):
 def d_equation_dr(expr):
     return d_system_dr([expr])[2].rewrite(exp, cos).expand()
 
+"""
 def d_system_dr(systems):
     order = len(systems)
     dfns = _get_function_list(systems)
@@ -148,3 +110,50 @@ def d_system_dr(systems):
 
     DR = linear_eq_to_matrix(lin_sys, damplitude)[0].det(method="lu")
     return (dprs, linear_eq_to_matrix(lin_sys, damplitude)[0], DR)
+"""
+
+def d_system_dr_v2(equations):
+    grid_list = _get_function_list(equations)
+    value_list = symbols(f"с0:{len(grid_list)}")
+    amp_list = symbols(f"d0:{len(grid_list)}")
+    grid_values = list(zip(grid_list, value_list))
+    grid_amps = dict(zip(grid_list, amp_list))
+
+    def linearise(addends):
+        linearised_addends = []
+        const_to_ampl = dict(zip(value_list, amp_list))
+
+        for addend in addends:
+            if is_continuous(addend):
+                derivatives = _get_deriv(addend.atoms(DiscreteGrid))
+                has_derivative = len(derivatives) != 0
+
+                if has_derivative:
+                    derivative = derivatives[0]
+                    factor = LC(poly(addend, derivative))
+                    order_x, order_t = derivative.args[-2][1], derivative.args[-1][1]
+                    factor_at_sol = factor.subs(grid_values)
+                    grid = derivative.args[0].to_grid()
+                    lin_addend = (I * k) ** order_x * (-I * w) ** order_t * factor_at_sol * grid_amps[grid]
+                else:
+                    addend_at_sol = addend.subs(grid_values)
+                    lin_addend = sum(const_to_ampl[const] * addend_at_sol.diff(const) for const in value_list)
+
+            else:
+                derivative = _get_deriv(addend.atoms(DiscreteGrid))[0]
+                factor = LC(poly(addend, derivative))
+                space_shift = (derivative.args[1] - a) * h
+                time_shift = (derivative.args[2] - n) * tau
+                factor_at_sol = factor.subs(grid_values)
+                grid = derivative.args[0].to_grid()
+                lin_addend = factor_at_sol * exp(I * (k * space_shift - w * time_shift)) * grid_amps[grid]
+
+            linearised_addends.append(lin_addend)
+
+        return sum(linearised_addends)
+
+    linearised_equations = [linearise(equation.expand().as_ordered_terms()) for equation in equations]
+    matrix = linear_eq_to_matrix(linearised_equations, amp_list)[0]
+    disp_rel = matrix.det(method="lu")
+    return grid_values, matrix, disp_rel
+    

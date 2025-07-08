@@ -2,7 +2,7 @@
 from sympy.printing.latex import LatexPrinter
 from sympy.core.expr import Basic, Expr
 from sympy.core.containers import Tuple
-from sympy import Idx, Integer, Symbol, symbols
+from sympy import Idx, Integer, Symbol, symbols, S
 
 a, n = symbols("a n", cls=Idx)
 x, t = symbols("x t")

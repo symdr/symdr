@@ -2,9 +2,8 @@ from sympy import Function, symbols, exp, I, Integer, Symbol
 from .discrete_funcs import DiscreteGrid, DiscreteGridBase
 
 x, t = symbols("x t")  # Equation parameters
-k, w, U, C = symbols("k omega U C")  # Wave parameter
+k, w, C = symbols("k omega C")  # Wave parameter
 h, tau = symbols("h tau")
-wave = U * exp(I * (k * x - w * t))  # The wave
 
 def _get_C_from_deriv(deriv):
     diffs = dict(deriv.args[1:])
@@ -33,7 +32,6 @@ def _get_deriv(term):
         if i._is_diff or i._is_shifted:
             return [i]
     return []
-
 
 def is_continuous(expr):
     if isinstance(expr, DiscreteGrid):

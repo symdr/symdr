@@ -1,9 +1,9 @@
 from .utils import _get_C_from_deriv, _linearise_product, _get_function_list, _get_deriv, is_continuous
-from .utils import k, w, U, C, h, tau, wave 
+from .utils import k, w, C, h, tau
 
 from sympy import symbols, Function, exp, \
                   Integer, solveset, EmptySet, \
-                  Eq, I, linear_eq_to_matrix
+                  Eq, I, linear_eq_to_matrix, cos
 
 from sympy import Derivative as D
 from sympy import poly, LC
@@ -12,8 +12,9 @@ from .discrete_funcs import *
 
 
 def equation_dr(expr):
+    """
     func = _get_function_list([expr])[0]
-    
+
     if solveset(Eq(expr.subs(func, U).doit(), 0), U) == EmptySet:
         raise ValueError("Couldn't find constant solutions. More advanced solution check is not supported.")
     
@@ -30,6 +31,8 @@ def equation_dr(expr):
             linearised += addend.diff(u).subs(u, C)
 
     return linearised.expand()
+    """
+    return system_dr([expr])[2]
 
 def system_dr(equations):
     fns = _get_function_list(equations)
@@ -70,7 +73,8 @@ def system_dr(equations):
     DR = linear_eq_to_matrix(lin_sys, amplitude)[0].det(method="lu")
     return (prs, linear_eq_to_matrix(lin_sys, amplitude)[0], DR)
 
-def d_equation_dr(expr, trig_rewrite=False):
+def d_equation_dr(expr):
+    """
     functions = [base.to_grid() for base in expr.atoms(DiscreteGridBase)]
     if len(functions) != 1:
         raise ValueError("Equation has an invalid amount of functions")
@@ -99,10 +103,9 @@ def d_equation_dr(expr, trig_rewrite=False):
                     #print(C_ab * (addend / factor).subs(u, UC) * wave, 3)
                     break
 
-    if trig_rewrite:
-        return (linearised / wave).expand().rewrite(exp, cos).expand()
-    else:
-        return (linearised / wave).expand()
+    return (linearised / wave).expand().rewrite(exp, cos).expand()
+    """
+    return d_system_dr([expr])[2].rewrite(exp, cos).expand()
 
 def d_system_dr(systems):
     order = len(systems)
@@ -154,9 +157,6 @@ def d_system_dr(systems):
 
 
         return sum(linerized_terms)
-
-
-
 
     lin_sys = []
     for equation in systems:

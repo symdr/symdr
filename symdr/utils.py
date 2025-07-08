@@ -2,7 +2,7 @@ from sympy import Function, symbols, exp, I, Integer, Symbol
 from .discrete_funcs import DiscreteGrid, DiscreteGridBase
 
 x, t = symbols("x t")  # Equation parameters
-k, w, C = symbols("k omega C")  # Wave parameter
+k, w = symbols("k omega")  # Wave parameter
 h, tau = symbols("h tau")
 
 def _get_C_from_deriv(deriv):
@@ -12,6 +12,7 @@ def _get_C_from_deriv(deriv):
     
     return (I * k) ** a * (-I * w) ** b
 
+"""
 def _linearise_product(prod, func):
     for idx, factor in enumerate(prod.args):
         if factor.is_Derivative:
@@ -19,6 +20,7 @@ def _linearise_product(prod, func):
             return f_ab.subs(func, C) * _get_C_from_deriv(factor)
         
     return factor.diff(func).subs(func, C)
+"""
 
 def _get_function_list(system):
     funcs = set()

@@ -5,3 +5,5 @@ dist
 build
 _build
 .installed.cfg
+test (ignore).py
+__pycache__

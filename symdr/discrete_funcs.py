@@ -1,15 +1,12 @@
-from sympy import *
+#from sympy import *
 from sympy.printing.latex import LatexPrinter
 from sympy.core.expr import Basic, Expr
 from sympy.core.containers import Tuple
-from sympy import Idx
-
-
+from sympy import Idx, Integer, Symbol, symbols
 
 a, n = symbols("a n", cls=Idx)
 x, t = symbols("x t")
 tau, h = symbols("tau h")
-
 
 def is_continuous(expr):
     if isinstance(expr, DiscreteGrid):

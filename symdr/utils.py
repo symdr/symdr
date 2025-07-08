@@ -2,16 +2,11 @@ from sympy import Function, symbols, exp, I, Integer, Symbol
 from .discrete_funcs import DiscreteGrid, DiscreteGridBase
 
 x, t = symbols("x t")  # Equation parameters
-
 k, w, U, C = symbols("k omega U C")  # Wave parameter
-
 h, tau = symbols("h tau")
-
 wave = U * exp(I * (k * x - w * t))  # The wave
 
-
 def _get_C_from_deriv(deriv):
-    
     diffs = dict(deriv.args[1:])
     a = diffs[x] if x in diffs else 0
     b = diffs[t] if t in diffs else 0
@@ -26,10 +21,7 @@ def _linearise_product(prod, func):
         
     return factor.diff(func).subs(func, C)
 
-
-
 def _get_function_list(system):
-
     funcs = set()
     for equation in system:
         funcs = funcs.union(equation.atoms(Function), {i.to_grid() for i in equation.atoms(DiscreteGridBase)})
@@ -37,11 +29,10 @@ def _get_function_list(system):
     return list(funcs)
 
 def _get_deriv(term):
-
-  for i in term:
-    if i._is_diff or i._is_shifted:
-      return [i]
-  return []
+    for i in term:
+        if i._is_diff or i._is_shifted:
+            return [i]
+    return []
 
 
 def is_continuous(expr):

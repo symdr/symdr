@@ -51,68 +51,7 @@ def system_dr(equations):
 def d_equation_dr(expr):
     return d_system_dr([expr])[2].rewrite(exp, cos).expand()
 
-"""
-def d_system_dr(systems):
-    order = len(systems)
-    dfns = _get_function_list(systems)
-    dconst     = symbols(f"c0:{len(dfns)}")
-    damplitude = symbols(f"d0:{len(dfns)}")
-    dprs   = list(zip(dfns, dconst))
-
-    def linearize(terms):
-        expr_ln = len(terms)
-        linerized_terms = []
-        amplss = list(zip(dfns, damplitude))
-        ampls = {i[0]: i[1] for i in amplss}
-        dc = {i[1]:i[0] for i in dprs}
-        dct = {i[0]:i[1] for i in dprs}
-
-        for i in range(len(terms)):
-          if is_continuous(terms[i]):
-            f = _get_deriv(terms[i].atoms(DiscreteGrid))
-
-            if len(f):
-              q = LC(poly(terms[i], f[0]))
-
-              count_x, count_t = f[0].args[-2][1], f[0].args[-1][1]
-
-              linerized_terms.append(
-                      ((I*k)**count_x)*((-I*w)**count_t)*q.subs(dprs)*ampls[f[0].args[0].to_grid()]
-                      )
-            else:
-                #return (terms[i], dprs)
-                m = terms[i].subs(dprs)
-                linerized_terms.append(sum([ampls[dc[k]]*m.diff(k) for k in dconst]))
-
-          else:
-            f = _get_deriv(terms[i].atoms(DiscreteGrid))
-            q = LC(poly(terms[i], f[0]))
-
-
-            ak = f[0].args[1] - a
-            nk = f[0].args[2] - n
-
-            linerized_terms.append(
-                (q.subs(dprs)*(exp(I*(k*ak*h - w*nk*tau))) * \
-                (ampls[f[0].args[0].to_grid()])).expand())
-
-
-
-
-        return sum(linerized_terms)
-
-    lin_sys = []
-    for equation in systems:
-
-        terms = (equation.expand()).as_ordered_terms()
-        lin_sys.append(linearize(terms))
-
-
-    DR = linear_eq_to_matrix(lin_sys, damplitude)[0].det(method="lu")
-    return (dprs, linear_eq_to_matrix(lin_sys, damplitude)[0], DR)
-"""
-
-def d_system_dr_v2(equations):
+def d_system_dr(equations):
     grid_list = _get_function_list(equations)
     value_list = symbols(f"с0:{len(grid_list)}")
     amp_list = symbols(f"d0:{len(grid_list)}")

@@ -5,23 +5,6 @@ x, t = symbols("x t")  # Equation parameters
 k, w = symbols("k omega")  # Wave parameter
 h, tau = symbols("h tau")
 
-def _get_C_from_deriv(deriv):
-    diffs = dict(deriv.args[1:])
-    a = diffs[x] if x in diffs else 0
-    b = diffs[t] if t in diffs else 0
-    
-    return (I * k) ** a * (-I * w) ** b
-
-"""
-def _linearise_product(prod, func):
-    for idx, factor in enumerate(prod.args):
-        if factor.is_Derivative:
-            f_ab = prod / prod.args[idx]
-            return f_ab.subs(func, C) * _get_C_from_deriv(factor)
-        
-    return factor.diff(func).subs(func, C)
-"""
-
 def _get_function_list(system):
     funcs = set()
     for equation in system:

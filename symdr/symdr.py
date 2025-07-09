@@ -17,7 +17,7 @@ def equation_dr(expr):
 def system_dr(equations):
     func_list = _get_function_list(equations)
     const_list = [Symbol(f"C_{func.func}") for func in func_list]
-    amp_list = [Symbol(f"\\hat{{{func.func}}}") for func in func_list]
+    amp_list = [Symbol(f"\\hat{{{latex(func.func)}}}") for func in func_list]
     func_values = list(zip(func_list, const_list))
     func_amps = dict(zip(func_list, amp_list))
 
@@ -54,7 +54,7 @@ def d_equation_dr(expr):
 def d_system_dr(equations):
     grid_list = _get_function_list(equations)
     value_list = [Symbol(f"C_{grid.name}") for grid in grid_list]
-    amp_list = [Symbol(f"\\hat{{{grid.name}}}") for grid in grid_list]
+    amp_list = [Symbol(f"\\hat{{{latex(grid.func)}}}") for grid in grid_list]
     grid_values = list(zip(grid_list, value_list))
     grid_amps = dict(zip(grid_list, amp_list))
 

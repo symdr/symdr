@@ -150,6 +150,14 @@ class DiscreteGrid(Expr):
                                x_diff_order, t_diff_order)
 
     @property
+    def name(self):
+        return self.args[0].args[0].name
+
+    @property
+    def base(self):
+        return self.args[0]
+
+    @property
     def _is_diff(self):
         return self.args[3][1] != S.Zero or self.args[4][1] != S.Zero
 

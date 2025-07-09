@@ -3,7 +3,7 @@ from .utils import k, w, h, tau
 
 from sympy import symbols, Function, exp, \
                   Integer, solveset, EmptySet, \
-                  Eq, I, linear_eq_to_matrix, cos
+                  Eq, I, linear_eq_to_matrix, cos, Symbol, latex
 
 from sympy import Derivative as D
 from sympy import poly, LC
@@ -16,8 +16,8 @@ def equation_dr(expr):
 
 def system_dr(equations):
     func_list = _get_function_list(equations)
-    const_list = symbols(f"c0:{len(func_list)}")
-    amp_list = symbols(f"d0:{len(func_list)}")
+    const_list = [Symbol(f"C_{func.func}") for func in func_list]
+    amp_list = [Symbol(f"\\hat{{{func.func}}}") for func in func_list]
     func_values = list(zip(func_list, const_list))
     func_amps = dict(zip(func_list, amp_list))
 
@@ -49,12 +49,12 @@ def system_dr(equations):
     return func_values, matrix, disp_rel
 
 def d_equation_dr(expr):
-    return d_system_dr([expr])[2].rewrite(exp, cos).expand()
+    return d_system_dr([expr])[2]
 
 def d_system_dr(equations):
     grid_list = _get_function_list(equations)
-    value_list = symbols(f"с0:{len(grid_list)}")
-    amp_list = symbols(f"d0:{len(grid_list)}")
+    value_list = [Symbol(f"C_{grid.name}") for grid in grid_list]
+    amp_list = [Symbol(f"\\hat{{{grid.name}}}") for grid in grid_list]
     grid_values = list(zip(grid_list, value_list))
     grid_amps = dict(zip(grid_list, amp_list))
 
@@ -93,6 +93,6 @@ def d_system_dr(equations):
 
     linearised_equations = [linearise(equation.expand().as_ordered_terms()) for equation in equations]
     matrix = linear_eq_to_matrix(linearised_equations, amp_list)[0]
-    disp_rel = matrix.det(method="lu")
+    disp_rel = matrix.det(method="lu").rewrite(exp, cos).expand()
     return grid_values, matrix, disp_rel
     

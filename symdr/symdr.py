@@ -1,4 +1,4 @@
-from .utils import _get_C_from_deriv, _get_function_list, _get_deriv, is_continuous
+from .utils import _get_function_list, _get_deriv, is_continuous
 from .utils import k, w, h, tau
 
 from sympy import symbols, Function, exp, \

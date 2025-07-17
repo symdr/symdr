@@ -1,4 +1,5 @@
-from symdr import SPHInclusiveSum, k, w
+from .sph_sums import SPHInclusiveSum
+from .utils import k, w
 import sympy
 
 """

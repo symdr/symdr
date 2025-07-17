@@ -10,6 +10,7 @@ from sympy import poly, LC
 
 from .discrete_funcs import *
 from .sph_sums import SPHInclusiveSum
+from .sph import systen_sph_dr, system_sph_dr_dimless
 
 
 def equation_dr(expr):

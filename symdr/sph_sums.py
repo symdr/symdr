@@ -2,7 +2,8 @@ from sympy.utilities.iterables import sift
 from sympy.core.mul import Mul
 from sympy.core.add import Add
 from sympy.core.expr import Expr
-from sympy.matrices.matrixbase import MatrixBase
+from sympy.matrices.matrixbase import MatrixBase  # might be overkill
+from sympy.printing.precedence import TRADITIONAL_PRECEDENCE
 
 class SPHInclusiveSum(Expr):
     is_commutative = True
@@ -47,3 +48,4 @@ class SPHInclusiveSum(Expr):
     def _latex(self, printer):
         return r"\sum_{}\left({}\right)".format(self.index, printer._print(self.function))  # TEST LATER
 
+TRADITIONAL_PRECEDENCE["SPHInclusiveSum"] = TRADITIONAL_PRECEDENCE["Sum"]

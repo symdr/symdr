@@ -88,7 +88,7 @@ class SPHExclusiveSum(Expr):
     def _eval_expand_basic(self, **hints):
         summand = self.function.expand(**hints)
         if summand.is_Add:
-            return Add(*[self.func(addend, self.index) for addend in summand.args])
+            return Add(*[self.func(addend, self.index, self.excluded) for addend in summand.args])
         elif isinstance(summand, MatrixBase):
             return summand.applyfunc(lambda elem: self.func(elem, self.index, self.excluded))
         elif summand != self.function:

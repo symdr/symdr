@@ -9,7 +9,7 @@ from sympy import Derivative as D
 from sympy import poly, LC
 
 from .discrete_funcs import *
-from .sph_sums import SPHInclusiveSum
+from .sph_sums import SPHInclusiveSum, SPHExclusiveSum
 from .sph import system_sph_dr, system_sph_dr_dimless
 
 

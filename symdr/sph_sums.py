@@ -3,7 +3,7 @@ from sympy.core.mul import Mul
 from sympy.core.add import Add
 from sympy.core.expr import Expr
 from sympy.matrices.matrixbase import MatrixBase  # might be overkill
-from sympy.printing.precedence import TRADITIONAL_PRECEDENCE
+from sympy.printing.precedence import PRECEDENCE_TRADITIONAL
 
 class SPHInclusiveSum(Expr):
     is_commutative = True
@@ -99,7 +99,7 @@ class SPHExclusiveSum(Expr):
         tex_func = printer._print(self.function)
         if self.function.is_Add:
             tex_func = f"\left({tex_func}\right)"
-        return f"\\sum_{self.index \\ne self.excluded} {tex_func}"  # TEST LATER
+        return r"\sum_{{} \ne {}} {}".format(self.index, self.excluded, tex_func)  # TEST LATER
 
-TRADITIONAL_PRECEDENCE["SPHInclusiveSum"] = TRADITIONAL_PRECEDENCE["Sum"]
-TRADITIONAL_PRECEDENCE["SPHExclusiveSum"] = TRADITIONAL_PRECEDENCE["Sum"]
+PRECEDENCE_TRADITIONAL["SPHInclusiveSum"] = PRECEDENCE_TRADITIONAL["Sum"]
+PRECEDENCE_TRADITIONAL["SPHExclusiveSum"] = PRECEDENCE_TRADITIONAL["Sum"]
